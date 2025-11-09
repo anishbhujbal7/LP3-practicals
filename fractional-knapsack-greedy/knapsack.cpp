@@ -29,30 +29,40 @@ void fractionalKnapsack(vector<Item> &items, double capacity) {
 
     cout << fixed << setprecision(2);
     cout << "\nItem Selection Steps:\n";
-    cout << "-----------------------------------------\n";
-    cout << "Item\tWeight\tProfit\tTaken(%)\n";
-    cout << "-----------------------------------------\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "Item\tWeight\tProfit\tTaken(%)\tProfit Added\n";
+    cout << "-----------------------------------------------------------\n";
 
     // Step 3: Take items greedily
     for (auto &item : items) {
         if (remainingCapacity == 0)
             break;
 
+        double takenFraction = 0.0;
+        double profitAdded = 0.0;
+
         if (item.weight <= remainingCapacity) {
             // Take the whole item
             remainingCapacity -= item.weight;
-            totalProfit += item.profit;
-            cout << item.id << "\t" << item.weight << "\t" << item.profit << "\t100%\n";
+            profitAdded = item.profit;
+            takenFraction = 1.0;
         } else {
             // Take fractional part
-            double fraction = remainingCapacity / item.weight;
-            totalProfit += item.profit * fraction;
-            cout << item.id << "\t" << item.weight << "\t" << item.profit << "\t" << fraction * 100 << "%\n";
+            takenFraction = remainingCapacity / item.weight;
+            profitAdded = item.profit * takenFraction;
             remainingCapacity = 0;
         }
+
+        totalProfit += profitAdded;
+
+        cout << item.id << "\t"
+             << item.weight << "\t"
+             << item.profit << "\t"
+             << takenFraction * 100 << "%\t\t"
+             << profitAdded << "\n";
     }
 
-    cout << "-----------------------------------------\n";
+    cout << "-----------------------------------------------------------\n";
     cout << "Total Profit = " << totalProfit << endl;
 }
 
@@ -78,6 +88,7 @@ int main() {
 
     return 0;
 }
+
 
 
 // Enter number of items: 3
